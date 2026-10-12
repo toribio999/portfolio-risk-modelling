@@ -205,7 +205,29 @@ The heavy-tailed specifications provide a substantially better fit than the Norm
 
 The results support the presence of **heavy-tailed return innovations**, making the Student-t specification more appropriate for subsequent volatility and risk analysis.
 
+### Value at Risk (VaR)
 
+VaR is estimated at 5%, 1%, and 0.1% confidence levels under four alternative innovation distributions: Normal, Student-t, GED, and Skewed Student-t. This comparison evaluates how distributional assumptions affect estimated potential losses, particularly under extreme market conditions.
+
+| Distribution | Confidence Level | Expected Return | Volatility | VaR | VaR Loss (%) |
+|---|---:|---:|---:|---:|---:|
+| Normal | 5.0% | 0.1981 | 0.1981 | 2.1855 | 3.40% |
+| Normal | 1.0% | 0.1981 | 0.1981 | 2.1855 | 4.89% |
+| Normal | 0.1% | 0.1981 | 0.1981 | 2.1855 | 6.56% |
+| Student-t | 5.0% | 0.1533 | 0.1533 | 2.1769 | 3.20% |
+| Student-t | 1.0% | 0.1533 | 0.1533 | 2.1769 | 5.57% |
+| Student-t | 0.1% | 0.1533 | 0.1533 | 2.1769 | **10.28%** |
+| GED | 5.0% | 0.1657 | 0.1657 | 2.1590 | 3.38% |
+| GED | 1.0% | 0.1657 | 0.1657 | 2.1590 | 5.61% |
+| GED | 0.1% | 0.1657 | 0.1657 | 2.1590 | 8.62% |
+| Skewed Student-t | 5.0% | 0.1406 | 0.1406 | 2.1771 | 3.24% |
+| Skewed Student-t | 1.0% | 0.1406 | 0.1406 | 2.1771 | 5.66% |
+| Skewed Student-t | 0.1% | 0.1406 | 0.1406 | 2.1771 | **10.47%** |
+
+The results highlight the importance of the assumed return distribution, particularly at extreme confidence levels. At 5%, the estimated losses are relatively similar across distributions, but the differences become substantial at the **0.1% tail**. The Student-t and Skewed Student-t specifications produce VaR losses above 10%, reflecting their ability to capture the heavy tails observed in NVDA returns. This supports the use of **heavy-tailed distributions for extreme-risk estimation** rather than relying solely on the Normal assumption.
+
+
+## Part II — Multivariate Risk: Equity Portfolio
 
 
 
