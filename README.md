@@ -188,7 +188,22 @@ The fitted GJR-GARCH model was used to estimate NVIDIA's time-varying conditiona
 
 ![NVDA GJR-GARCH Conditional Volatility](images/vol_garch.png)
 
+### Innovation Distribution Comparison
 
+To account for the heavy tails observed in the standardized residuals, the GJR-GARCH model was estimated under four different innovation distributions.
+
+![NVDA GJR-GARCH Standardized Residuals](images/residuals_distr.png)
+
+| Distribution | Log-Likelihood | AIC | BIC |
+|---|---:|---:|---:|
+| **Student-t** | **-9,354.30** | **18,718.61** | **18,750.11** |
+| Skewed Student-t | -9,353.98 | 18,719.97 | 18,757.77 |
+| GED | -9,399.78 | 18,809.56 | 18,841.06 |
+| Normal | -9,659.30 | 19,326.60 | 19,351.80 |
+
+The heavy-tailed specifications provide a substantially better fit than the Normal distribution. The **Student-t model is selected as the preferred specification**, achieving the lowest AIC and BIC, while the Skewed Student-t provides a very similar log-likelihood at the cost of an additional parameter.
+
+The results support the presence of **heavy-tailed return innovations**, making the Student-t specification more appropriate for subsequent volatility and risk analysis.
 
 
 
