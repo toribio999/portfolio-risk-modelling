@@ -307,12 +307,12 @@ $$
 
 The leverage parameter $\gamma_i$ captures the additional effect of negative shocks on volatility.
 
-| Ticker | $\alpha_1$ | $\gamma_1$ | $\beta_1$ | $\nu$ | Persistence |
-|---|---:|---:|---:|---:|---:|
-| NVDA | 0.0300 | 0.0719 | 0.9305 | 4.5476 | 0.9965 |
-| MSFT | 0.0254 | 0.1269 | 0.8819 | 4.6325 | 0.9707 |
-| JNJ | 0.0436 | 0.0945 | 0.8616 | 4.6128 | 0.9524 |
-| PG | 0.0185 | 0.1054 | 0.8889 | 4.4816 | 0.9601 |
+| **Asset** | **mu** | **omega** | **alpha[1]** | **gamma[1]** | **beta[1]** | **Persistence** |
+|----------|-------:|----------:|-------------:|-------------:|-----------:|----------------:|
+| NVDA     | 0.1726 | 0.3201    | 0.0537       | 0.0850       | 0.8703     | 0.9664          |
+| MSFT     | 0.0732 | 0.0863    | 0.0145       | 0.0820       | 0.9092     | 0.9647          |
+| JNJ      | 0.0372 | 0.0479    | 0.0332       | 0.0690       | 0.8879     | 0.9556          |
+| PG       | 0.0252 | 0.0478    | 0.0250       | 0.0824       | 0.8886     | 0.9548          |
 
 Volatility persistence is high across all assets, particularly for NVDA, whose persistence estimate is 0.9965. This indicates that volatility shocks decay slowly. The positive leverage parameters suggest that negative return shocks increase volatility more than positive shocks of the same magnitude, conditional on the model specification.
 
@@ -320,12 +320,12 @@ The estimated degrees of freedom are around 4.5 for all four assets, supporting 
 
 #### Residual Diagnostics
 
-| Ticker | Ljung-Box(10) on $z^2$ p-value | ARCH-LM(10) p-value |
-|---|---:|---:|
-| NVDA | 0.9016 | 0.9050 |
-| MSFT | 0.7519 | 0.7313 |
-| JNJ | 0.9960 | 0.9953 |
-| PG | 0.8302 | 0.8410 |
+| **Asset** | **Ljung-Box(10) z² p-value** | **ARCH-LM(10) p-value** |
+|----------|----------------------------:|------------------------:|
+| NVDA     | 0.9201                      | 0.9188                  |
+| MSFT     | 0.9481                      | 0.9514                  |
+| JNJ      | 0.9998                      | 0.9998                  |
+| PG       | 0.8884                      | 0.8975                  |
 
 The high p-values indicate no significant evidence of remaining autocorrelation in squared standardized residuals or residual ARCH effects at the 10% significance level. This suggests that the individual GJR-GARCH models capture much of the conditional volatility structure in the data.
 
@@ -342,9 +342,9 @@ The matrix $Q_t$ is normalized to obtain the time-varying conditional correlatio
 
 The estimated parameters are:
 
-- **DCC parameter ($a$):** 0.0144
-- **DCC parameter ($b$):** 0.9769
-- **Persistence ($a+b$):** 0.9913
+- **DCC parameter ($a$):** 0.0143
+- **DCC parameter ($b$):** 0.9766
+- **Persistence ($a+b$):** 0.9909
 
 The high persistence indicates that conditional correlations adjust gradually and that the impact of shocks on cross-asset dependence can persist over time.
 
@@ -352,12 +352,12 @@ The high persistence indicates that conditional correlations adjust gradually an
 
 The estimated unconditional matrix $\bar Q$ provides the long-run dependence reference used in the DCC recursion. It is not itself a correlation matrix, since its diagonal elements are not normalized to one.
 
-| Ticker | NVDA | MSFT | JNJ | PG |
-|---|---:|---:|---:|---:|
-| NVDA | 1.048 | 0.498 | 0.112 | 0.122 |
-| MSFT | 0.498 | 1.018 | 0.256 | 0.270 |
-| JNJ | 0.112 | 0.256 | 1.024 | 0.432 |
-| PG | 0.122 | 0.270 | 0.432 | 0.994 |
+| **Asset** | **NVDA** | **MSFT** | **JNJ** | **PG** |
+|----------|---------:|---------:|--------:|-------:|
+| NVDA     | 0.999    | 0.496    | 0.110   | 0.123  |
+| MSFT     | 0.496    | 1.000    | 0.260   | 0.278  |
+| JNJ      | 0.110    | 0.260    | 1.000   | 0.435  |
+| PG       | 0.123    | 0.278    | 0.435   | 1.000  |
 
 The largest off-diagonal element is between NVDA and MSFT, while NVDA has weaker dependence with JNJ and PG. This is broadly consistent with the unconditional return correlations, although the matrices are not directly equivalent because they are based on different quantities.
 
@@ -375,47 +375,56 @@ $$
 \sigma_{p,t}=\sqrt{w^\top H_tw}
 $$
 
-At the final sample date, **31 December 2025**, the estimated portfolio daily volatility is **0.786%**, equivalent to approximately **12.48% annualized volatility**, assuming 252 trading days per year.
+At the final sample date, **31 December 2025**, the estimated portfolio daily volatility is **0.806%**, equivalent to approximately **12.79% annualized volatility**, assuming 252 trading days per year.
 
-| Ticker | Weight | Conditional Daily Volatility (%) | Risk Contribution | Relative Risk Contribution |
-|---|---:|---:|---:|---:|
-| NVDA | 25% | 2.2572 | 0.4381 | 55.72% |
-| MSFT | 25% | 1.1616 | 0.1965 | 25.00% |
-| JNJ | 25% | 0.9680 | 0.0721 | 9.17% |
-| PG | 25% | 1.0980 | 0.0795 | 10.11% |
+| **Asset** | **Weight** | **Conditional Daily Volatility (%)** | **Risk Contribution (daily volatility points)** | **Relative Risk Contribution** |
+|----------|----------:|------------------------------------:|----------------------------------------------:|-------------------------------:|
+| NVDA     | 0.25      | 2.2420                              | 0.4337                                        | 0.5383                         |
+| MSFT     | 0.25      | 1.2714                              | 0.2230                                        | 0.2767                         |
+| JNJ      | 0.25      | 0.9882                              | 0.0734                                        | 0.0911                         |
+| PG       | 0.25      | 1.0724                              | 0.0756                                        | 0.0939                         |
 
-Despite representing only one quarter of the portfolio, NVDA contributes approximately **55.7% of total portfolio risk**. MSFT contributes another 25%, while JNJ and PG together account for approximately 19.3%.
+Despite representing only one quarter of the portfolio, NVDA contributes approximately **53.8% of total portfolio risk**. MSFT contributes another 27%, while JNJ and PG together account for approximately 18.5%.
 
 This illustrates that equal capital allocation does not imply equal risk allocation. The portfolio's risk is concentrated in the two technology stocks, particularly NVDA.
 
-### 5. Out-of-Sample Parametric Value at Risk
+### Out-of-Sample DCC-GARCH VaR Forecasts
 
-The portfolio VaR is estimated out of sample using the conditional volatility forecasts generated by the DCC-GARCH framework. Under a conditional normal approximation, VaR measures the loss threshold expected to be exceeded with probability $1-c$ at confidence level $c$.
+The table reports out-of-sample Value-at-Risk (VaR) forecasts from the DCC-GARCH model for the final five trading days of 2025. Forecasts are compared across three approaches: the baseline VaR estimate, a Student-t parametric specification, and Filtered Historical Simulation (FHS), at confidence levels of 95%, 99%, and 99.9%. The model is re-estimated using only observations available before each out-of-sample forecasting block, avoiding look-ahead bias.
 
-| Date | VaR 95% (%) | VaR 99% (%) |
-|---|---:|---:|
-| 2025-12-24 | 1.669 | 3.136 |
-| 2025-12-26 | 1.616 | 3.036 |
-| 2025-12-29 | 1.563 | 2.937 |
-| 2025-12-30 | 1.527 | 2.869 |
-| 2025-12-31 | 1.485 | 2.789 |
+| **Date** | **VaR 95%** | **VaR 95% (t)** | **VaR 95% (FHS)** | **VaR 99%** | **VaR 99% (t)** | **VaR 99% (FHS)** | **VaR 99.9%** | **VaR 99.9% (t)** | **VaR 99.9% (FHS)** |
+|----------|------------:|----------------:|------------------:|------------:|----------------:|------------------:|--------------:|------------------:|--------------------:|
+| 2025-12-24 | 1.398 | 1.320 | 1.391 | 2.009 | 2.204 | 2.203 | 2.693 | 3.766 | 3.612 |
+| 2025-12-26 | 1.354 | 1.279 | 1.348 | 1.947 | 2.137 | 2.136 | 2.611 | 3.651 | 3.502 |
+| 2025-12-29 | 1.311 | 1.239 | 1.305 | 1.887 | 2.071 | 2.070 | 2.532 | 3.541 | 3.397 |
+| 2025-12-30 | 1.290 | 1.219 | 1.285 | 1.857 | 2.039 | 2.038 | 2.492 | 3.486 | 3.344 |
+| 2025-12-31 | 1.256 | 1.187 | 1.251 | 1.809 | 1.986 | 1.985 | 2.428 | 3.398 | 3.259 |
 
+**Interpretation.** VaR forecasts decline steadily throughout the period, indicating a reduction in estimated portfolio risk under the model's evolving conditional volatility and correlation estimates. Differences between approaches become more pronounced at higher confidence levels: the Student-t and FHS methods produce substantially larger 99% and 99.9% VaR estimates than the baseline specification, reflecting their greater sensitivity to tail risk. At the 95% level, the baseline and FHS estimates are very similar, while the Student-t estimates are slightly lower. These results illustrate the importance of distributional assumptions when measuring extreme losses. However, five forecast dates are insufficient to establish comparative model accuracy; a longer out-of-sample period and exception-based backtesting are needed to assess VaR calibration and reliability.
 The VaR estimates decline over these final out-of-sample observations, indicating that the model forecasts lower conditional portfolio risk during this period. The 99% VaR is higher than the 95% VaR, as it corresponds to a more extreme loss threshold.
 
 These values describe model-based risk forecasts rather than maximum possible losses. Their reliability must be assessed by comparing the forecasts against realized portfolio returns.
 
 
+### Out-of-Sample VaR Backtesting
 
+The table compares the out-of-sample VaR performance of three approaches: the Normal distribution, Student-t distribution, and Filtered Historical Simulation (FHS), at 95%, 99%, and 99.9% confidence levels. The expected breach rate is the probability of a loss exceeding the VaR threshold, while the observed breach rate and number of breaches measure how frequently actual losses exceed the forecasts. Expected breaches are calculated by multiplying the expected breach rate by the number of observations (2,514).
 
+| **Model** | **Confidence Level** | **Expected Breach Rate** | **Observed Breach Rate** | **Number of Breaches** | **Expected Breaches** |
+|-----------|---------------------:|-------------------------:|-------------------------:|-----------------------:|----------------------:|
+| Normal    | 95%                  | 0.050                    | 0.0533                   | 134                    | 125.700               |
+| Normal    | 99%                  | 0.010                    | 0.0159                   | 40                     | 25.140                |
+| Normal    | 99.9%                | 0.001                    | 0.0048                   | 12                     | 2.514                 |
+| Student-t | 95%                  | 0.050                    | 0.0625                   | 157                    | 125.700               |
+| Student-t | 99%                  | 0.010                    | 0.0119                   | 30                     | 25.140                |
+| Student-t | 99.9%                | 0.001                    | 0.0012                   | 3                      | 2.514                 |
+| FHS       | 95%                  | 0.050                    | 0.0529                   | 133                    | 125.700               |
+| FHS       | 99%                  | 0.010                    | 0.0119                   | 30                     | 25.140                |
+| FHS       | 99.9%                | 0.001                    | 0.0016                   | 4                      | 2.514                 |
 
+**Interpretation.** All three approaches underestimate the frequency of breaches at the 95% confidence level, although FHS is the closest to the expected rate, with 133 observed breaches against 125.7 expected. At the 99% level, the Normal model performs worst, recording 40 breaches compared with 25.14 expected, whereas Student-t and FHS both record 30. The differences become most pronounced at the 99.9% level: the Normal model produces 12 breaches against only 2.514 expected, indicating substantial underestimation of extreme tail risk. Student-t performs best at this level, with three breaches, followed closely by FHS with four. Overall, the Student-t and FHS approaches provide more reliable estimates of extreme downside risk than the Normal specification, particularly at higher confidence levels. Formal coverage and independence tests are still needed to determine whether these differences are statistically significant.
 
-
-
-
-
-### Value-at-Risk Backtesting
-
-#### Methodology
+### Out-of-Sample VaR Backtesting: Statistical Tests
 
 Value-at-Risk (VaR) estimates the loss threshold expected to be exceeded with probability \(1-c\), where \(c\) is the confidence level.
 
@@ -460,31 +469,24 @@ Under the null hypothesis, \(LR_{\text{cc}}\) asymptotically follows a chi-squar
 
 For both tests, a p-value below 0.05 leads to rejection of the corresponding null hypothesis.
 
-#### Results
 
-| Model | Confidence Level | Exceptions | Expected | Observed Rate | Kupiec p-value | Christoffersen Independence p-value | Conditional Coverage p-value |
-|:---|---:|---:|---:|---:|---:|---:|---:|
-| Normal | 95% | 134 | 125.7 | 5.33% | 0.4522 | 0.2743 | 0.4147 |
-| Normal | 99% | 40 | 25.1 | 1.59% | 0.0061 | 0.6687 | 0.0212 |
-| Normal | 99.9% | 12 | 2.5 | 0.48% | 0.0000 | 0.7344 | 0.0001 |
-| Student-t | 95% | 157 | 125.7 | 6.25% | 0.0057 | 0.9311 | 0.0220 |
-| Student-t | 99% | 30 | 25.1 | 1.19% | 0.3445 | 0.3945 | 0.4452 |
-| Student-t | 99.9% | 3 | 2.5 | 0.12% | 0.7661 | 0.9325 | 0.9533 |
-| FHS | 95% | 133 | 125.7 | 5.29% | 0.5079 | 0.2551 | 0.4203 |
-| FHS | 99% | 30 | 25.1 | 1.19% | 0.3445 | 0.3945 | 0.4452 |
-| FHS | 99.9% | 4 | 2.5 | 0.16% | 0.3883 | 0.9101 | 0.6849 |
+### Results
 
-*Note: P-values displayed as 0.0000 are rounded and should not be interpreted as exactly zero.*
+The table reports the Kupiec unconditional coverage test and the Christoffersen independence and conditional coverage tests for the Normal, Student-t, and Filtered Historical Simulation (FHS) approaches. The Kupiec test evaluates whether the observed exception frequency is consistent with the nominal VaR confidence level, while the Christoffersen independence test assesses whether exceptions occur independently over time. The conditional coverage test combines both properties. At a 5% significance level, p-values below 0.05 indicate rejection of the corresponding null hypothesis.
 
-#### Interpretation
+| **Model** | **Confidence Level** | **Exceptions** | **Expected** | **Observed Rate** | **Kupiec p (coverage)** | **Christoffersen p (independence)** | **Christoffersen p (cond. coverage)** |
+|-----------|---------------------:|---------------:|-------------:|------------------:|------------------------:|------------------------------------:|-------------------------------------:|
+| Normal    | 95%                  | 134            | 125.7        | 0.0533            | 0.4522                  | 0.2743                              | 0.4147                               |
+| Normal    | 99%                  | 40             | 25.1         | 0.0159            | 0.0061                  | 0.6687                              | 0.0212                               |
+| Normal    | 99.9%                | 12             | 2.5          | 0.0048            | 0.0000                  | 0.7344                              | 0.0001                               |
+| Student-t | 95%                  | 157            | 125.7        | 0.0625            | 0.0057                  | 0.9311                              | 0.0220                               |
+| Student-t | 99%                  | 30             | 25.1         | 0.0119            | 0.3445                  | 0.3945                              | 0.4452                               |
+| Student-t | 99.9%                | 3              | 2.5          | 0.0012            | 0.7661                  | 0.9325                              | 0.9533                               |
+| FHS       | 95%                  | 133            | 125.7        | 0.0529            | 0.5079                  | 0.2551                              | 0.4203                               |
+| FHS       | 99%                  | 30             | 25.1         | 0.0119            | 0.3445                  | 0.3945                              | 0.4452                               |
+| FHS       | 99.9%                | 4              | 2.5          | 0.0016            | 0.3883                  | 0.9101                              | 0.6849                               |
 
-**Normal distribution.** The model provides acceptable coverage at the 95% confidence level. However, it significantly underestimates risk at the 99% and 99.9% levels, where observed exceptions exceed the expected frequency. This indicates that the Gaussian assumption does not adequately capture extreme portfolio losses.
-
-**Student-t distribution.** The model fails the coverage tests at the 95% level but performs adequately at the 99% and 99.9% levels. The heavier-tailed distribution therefore provides a more suitable parametric representation of extreme losses, although its performance varies across confidence levels.
-
-**Filtered Historical Simulation (FHS).** FHS passes the coverage and conditional coverage tests at all three confidence levels. By combining volatility filtering with the empirical distribution of standardized residuals, it avoids imposing a specific parametric distribution on the innovations.
-
-The independence tests do not reject their null hypotheses for any model, providing insufficient evidence that exceptions cluster over time. However, failure to reject a hypothesis does not prove that a model is correctly specified.
+**Interpretation.** At the 95% confidence level, the Normal and FHS models pass all three tests, whereas Student-t is rejected by the Kupiec and conditional coverage tests because of its higher-than-expected exception frequency. At the 99% level, the Normal model fails both coverage and conditional coverage, while Student-t and FHS pass all tests. The differences are clearest at the 99.9% level: the Normal model is strongly rejected for coverage and conditional coverage, whereas Student-t and FHS pass all tests, with Student-t recording three exceptions against approximately 2.5 expected. Overall, Student-t and FHS provide better-calibrated estimates of extreme tail risk than the Normal model in this backtest. These conclusions should nevertheless be interpreted cautiously because very few exceptions are expected at the 99.9% level, limiting the statistical power of the tests.
 
 #### Conclusion
 
@@ -494,10 +496,95 @@ These results should be interpreted cautiously, particularly at the 99.9% level,
 
 
 
+## Monte Carlo Simulation
 
+## Monte Carlo Simulation of Portfolio Returns
 
+Monte Carlo simulation is used to estimate the distribution of next-day portfolio returns by generating 50,000 (or `N_SIM`) correlated scenarios from the fitted GJR-GARCH and DCC models. The simulation incorporates time-varying individual asset volatility, asymmetric volatility responses to negative shocks, and dynamic correlations between assets. Standardized shocks are drawn from either a multivariate Normal or Student-t distribution, allowing the analysis to capture different levels of tail risk.
 
+### Methodology
 
+The simulation proceeds in four steps:
+
+1. **Forecast conditional volatility.** The one-step-ahead variance for each asset is forecast using the fitted GJR-GARCH(1,1) model:
+
+   $$\sigma_{i,T+1}^{2}=\omega_i+\alpha_i\varepsilon_{i,T}^{2}+\gamma_i\varepsilon_{i,T}^{2}I(\varepsilon_{i,T}<0)+\beta_i\sigma_{i,T}^{2}$$
+
+   The leverage term allows negative shocks to affect future volatility differently from positive shocks.
+
+2. **Forecast conditional correlations.** The DCC model generates the next-day correlation matrix $R_{T+1}$, which is combined with the forecast volatilities to obtain the conditional covariance matrix:
+
+   $$H_{T+1}=D_{T+1}R_{T+1}D_{T+1}$$
+
+   where $D_{T+1}$ is the diagonal matrix of forecast conditional standard deviations.
+
+3. **Generate correlated return scenarios.** A Cholesky decomposition of $R_{T+1}$ introduces dependence between simulated asset returns. The shocks follow either a Normal distribution or a Student-t distribution with estimated degrees of freedom. In the Student-t case, a common mixing factor preserves the multivariate dependence structure and scales the shocks to unit variance.
+
+4. **Calculate portfolio returns.** Simulated asset log returns are converted into simple returns before applying the portfolio weights:
+
+   $$R_{p,T+1}^{(s)}=\sum_{i=1}^{N}w_i\left[\exp\left(\frac{r_{i,T+1}^{(s)}}{100}\right)-1\right]\times100$$
+
+   where $s$ denotes a simulated scenario, $w_i$ is the portfolio weight, and asset returns are expressed in percentage units.
+
+### Interpretation and Applications
+
+The resulting simulated distribution approximates the portfolio's one-day-ahead return distribution, conditional on the latest observed market information and the fitted model parameters. It can be used to estimate expected returns, volatility, downside quantiles, Value-at-Risk (VaR), and Expected Shortfall (ES).
+
+Comparing Normal and Student-t simulations highlights the effect of distributional assumptions on extreme-loss estimates. The Student-t specification allows for heavier tails, potentially producing more severe downside scenarios than the Normal specification. However, the magnitude of this difference depends on the estimated degrees of freedom and the portfolio's conditional covariance structure.
+
+**Important limitation:** The simulation uses full-sample fitted parameters and the final observed volatility and correlation states. It is therefore a conditional one-day-ahead scenario analysis, not a genuine out-of-sample backtest. For an unbiased assessment of predictive performance, the model parameters and state estimates must be obtained using data available strictly before each forecast date.
+
+## Multi-Day Monte Carlo Portfolio Simulation
+
+The multi-day Monte Carlo simulation extends the one-day analysis by generating portfolio value trajectories over a specified investment horizon. Unlike a simulation based on a constant covariance matrix, this approach dynamically updates individual asset volatilities and cross-asset correlations at every time step using the fitted GJR-GARCH and DCC models. This allows the simulation to capture volatility persistence, asymmetric responses to negative shocks, and changing dependence between assets.
+
+### Methodology
+
+The simulation follows four main steps:
+
+1. **Initialize the system.** Each simulated path starts from the latest observed residuals, conditional variances, standardized residuals, and DCC state. All paths begin with the same initial portfolio value.
+
+2. **Update conditional volatilities.** At each simulated day, the GJR-GARCH variance equation is applied to every asset:
+
+   $$\sigma_{i,t}^{2}=\omega_i+\alpha_i\varepsilon_{i,t-1}^{2}+\gamma_i\varepsilon_{i,t-1}^{2}I(\varepsilon_{i,t-1}<0)+\beta_i\sigma_{i,t-1}^{2}$$
+
+   This captures volatility clustering and the asymmetric impact of negative shocks.
+
+3. **Update correlations and simulate returns.** The DCC recursion updates the correlation-generating matrix:
+
+   $$Q_t=(1-a-b)\bar{Q}+az_{t-1}z_{t-1}^{\top}+bQ_{t-1}$$
+
+   The matrix is normalized to obtain $R_t$, from which correlated standardized shocks are generated using a Cholesky decomposition. Normal or Student-t shocks can be selected according to the simulation configuration.
+
+4. **Update portfolio value.** Simulated asset log returns are converted into simple returns and combined using the portfolio weights. Assuming daily rebalancing, portfolio value evolves as
+
+   $$V_t=V_{t-1}\left(1+\sum_{i=1}^{N}w_iR_{i,t}\right)$$
+
+   where $V_t$ is the portfolio value and $R_{i,t}$ denotes the simple return of asset $i$.
+
+### Portfolio Trajectories and Horizon Risk
+
+The simulation generates multiple possible portfolio trajectories over the selected horizon. Individual paths illustrate the range of potential outcomes, while the mean simulated path summarizes their average evolution. The mean is not a guaranteed forecast or necessarily the most likely outcome.
+
+Risk is evaluated using the distribution of terminal profit and loss:
+
+$$PnL^{(s)}=V_H^{(s)}-V_0$$
+
+For a lower-tail probability $\alpha$, the corresponding horizon VaR is calculated as
+
+$$VaR_{1-\alpha}=-Q_{\alpha}(PnL)$$
+
+where $Q_{\alpha}$ is the empirical $\alpha$-quantile of terminal PnL. Expected Shortfall (ES) measures the average loss among simulated outcomes in the same lower tail:
+
+$$ES_{1-\alpha}=-\mathbb{E}\left[PnL\mid PnL\leq Q_{\alpha}(PnL)\right]$$
+
+Both measures are reported in monetary terms, with VaR also expressed as a percentage of the initial portfolio value.
+
+### Interpretation
+
+By allowing volatility and correlations to evolve along each simulated path, the model captures the dynamic nature of portfolio risk over multiple days. The resulting terminal loss distribution provides estimates of potential downside under different market scenarios. Student-t innovations can generate heavier-tailed outcomes than Normal innovations, making the choice of shock distribution particularly relevant for extreme-risk measures.
+
+**Limitations.** Results depend on the fitted model parameters, the assumed shock distribution, the rebalancing convention, and the selected horizon. Monte Carlo estimates are subject to simulation error, especially for extreme quantiles such as 99.9% VaR. Increasing the number of paths can improve numerical precision but does not eliminate model risk. Since the simulation uses full-sample estimates and the final observed state, it should be interpreted as a conditional risk scenario analysis rather than an out-of-sample validation.
 
 
 
