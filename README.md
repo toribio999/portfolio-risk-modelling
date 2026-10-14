@@ -245,7 +245,13 @@ These assets were selected to construct a multi-asset portfolio combining techno
 
 The dataset contains **4,024 daily observations**, covering January 2010 to December 2025.
 
+![NVDA GJR-GARCH Conditional Volatility](images/mult_vol.png)
+
 ### 1. Exploratory Data Analysis
+
+
+
+
 
 ### Descriptive Statistics and Diagnostic Tests
 
@@ -361,6 +367,9 @@ The estimated unconditional matrix $\bar Q$ provides the long-run dependence ref
 
 The largest off-diagonal element is between NVDA and MSFT, while NVDA has weaker dependence with JNJ and PG. This is broadly consistent with the unconditional return correlations, although the matrices are not directly equivalent because they are based on different quantities.
 
+![NVDA GJR-GARCH Conditional Volatility](images/dcc_corr.png)
+
+
 ### 4. Portfolio Volatility and Risk Contributions
 
 Assuming equal portfolio weights of 25% per asset, the conditional covariance matrix is obtained from:
@@ -423,6 +432,9 @@ The table compares the out-of-sample VaR performance of three approaches: the No
 | FHS       | 99.9%                | 0.001                    | 0.0016                   | 4                      | 2.514                 |
 
 **Interpretation.** All three approaches underestimate the frequency of breaches at the 95% confidence level, although FHS is the closest to the expected rate, with 133 observed breaches against 125.7 expected. At the 99% level, the Normal model performs worst, recording 40 breaches compared with 25.14 expected, whereas Student-t and FHS both record 30. The differences become most pronounced at the 99.9% level: the Normal model produces 12 breaches against only 2.514 expected, indicating substantial underestimation of extreme tail risk. Student-t performs best at this level, with three breaches, followed closely by FHS with four. Overall, the Student-t and FHS approaches provide more reliable estimates of extreme downside risk than the Normal specification, particularly at higher confidence levels. Formal coverage and independence tests are still needed to determine whether these differences are statistically significant.
+
+![NVDA GJR-GARCH Conditional Volatility](images/backtest.png)
+
 
 ### Out-of-Sample VaR Backtesting: Statistical Tests
 
@@ -530,6 +542,9 @@ The simulation proceeds in four steps:
 
 The resulting simulated distribution approximates the portfolio's one-day-ahead return distribution, conditional on the latest observed market information and the fitted model parameters. It can be used to estimate expected returns, volatility, downside quantiles, Value-at-Risk (VaR), and Expected Shortfall (ES).
 
+
+![NVDA GJR-GARCH Conditional Volatility](images/mont_hist.png)
+
 Comparing Normal and Student-t simulations highlights the effect of distributional assumptions on extreme-loss estimates. The Student-t specification allows for heavier tails, potentially producing more severe downside scenarios than the Normal specification. However, the magnitude of this difference depends on the estimated degrees of freedom and the portfolio's conditional covariance structure.
 
 **Important limitation:** The simulation uses full-sample fitted parameters and the final observed volatility and correlation states. It is therefore a conditional one-day-ahead scenario analysis, not a genuine out-of-sample backtest. For an unbiased assessment of predictive performance, the model parameters and state estimates must be obtained using data available strictly before each forecast date.
@@ -583,6 +598,8 @@ Both measures are reported in monetary terms, with VaR also expressed as a perce
 ### Interpretation
 
 By allowing volatility and correlations to evolve along each simulated path, the model captures the dynamic nature of portfolio risk over multiple days. The resulting terminal loss distribution provides estimates of potential downside under different market scenarios. Student-t innovations can generate heavier-tailed outcomes than Normal innovations, making the choice of shock distribution particularly relevant for extreme-risk measures.
+
+![NVDA GJR-GARCH Conditional Volatility](images/mont_paths.png)
 
 **Limitations.** Results depend on the fitted model parameters, the assumed shock distribution, the rebalancing convention, and the selected horizon. Monte Carlo estimates are subject to simulation error, especially for extreme quantiles such as 99.9% VaR. Increasing the number of paths can improve numerical precision but does not eliminate model risk. Since the simulation uses full-sample estimates and the final observed state, it should be interpreted as a conditional risk scenario analysis rather than an out-of-sample validation.
 
