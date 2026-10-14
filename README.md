@@ -1,8 +1,18 @@
-# Portfolio Risk Modelling: GARCH Volatility, DCC Correlations, VaR & Monte Carlo
+# Portfolio Risk Modelling: GJR-GARCH Volatility, DCC Correlations, VaR & Monte Carlo
 
-## Summary
+# Summary
 
 This project develops a two-stage market-risk modelling workflow in Python, progressing from the analysis of a single stock to a multi-asset equity portfolio. The first part focuses on **NVDA**, analysing return distributions, volatility clustering and asymmetric volatility before estimating GARCH-family models and translating the results into one-day VaR measures. The second part extends the framework to an equally weighted portfolio of **NVDA, MSFT, JNJ and PG**, combining individual GARCH models with DCC-GARCH to capture time-varying correlations. Portfolio VaR and Expected Shortfall are then estimated, backtested and complemented with Monte Carlo simulations of future portfolio losses.
+
+## Structure 
+
+Two Jupyter notebooks that build a market-risk workflow in Python, moving from a **single stock (NVDA)** to a **four-asset equity portfolio (NVDA, MSFT, JNJ, PG)**. Daily data runs from January 2010 to December 2025 (4,024 observations).
+
+| Notebook | Scope | Core question |
+|---|---|---|
+| `Modelling_1.ipynb` | Univariate | How volatile is NVDA, how does that volatility behave over time, and how large can a one-day loss be? |
+| `Modelling2_multivariate.ipynb` | Multivariate | How do correlations and volatilities interact at portfolio level, and how reliable is the resulting VaR? |
+
 
 ## Key Insights
 
@@ -25,7 +35,7 @@ This project develops a two-stage market-risk modelling workflow in Python, prog
 - **Forward-looking risk:** Monte Carlo simulations based on the final conditional covariance matrix generate **VaR, Expected Shortfall and multi-day portfolio loss scenarios**.
 
 
-## 2. Technical Stack
+## Technical Stack
 
 | Area | Tools |
 |---|---|
@@ -36,15 +46,6 @@ This project develops a two-stage market-risk modelling workflow in Python, prog
 | Machine learning / distributions | `scikit-learn` (`GaussianMixture`) |
 | Optimisation | `scipy.optimize` (constrained QMLE for DCC) |
 | Visualisation | `matplotlib`, `seaborn` |
-
-### Structure 
-
-Two Jupyter notebooks that build a market-risk workflow in Python, moving from a **single stock (NVDA)** to a **four-asset equity portfolio (NVDA, MSFT, JNJ, PG)**. Daily data runs from January 2010 to December 2025 (4,024 observations).
-
-| Notebook | Scope | Core question |
-|---|---|---|
-| `Modelling_1.ipynb` | Univariate | How volatile is NVDA, how does that volatility behave over time, and how large can a one-day loss be? |
-| `Modelling2_multivariate.ipynb` | Multivariate | How do correlations and volatilities interact at portfolio level, and how reliable is the resulting VaR? |
 
 ### Main Analytical Methods
 
@@ -57,9 +58,9 @@ Two Jupyter notebooks that build a market-risk workflow in Python, moving from a
 - **Kupiec** VaR backtesting
 - Monte Carlo simulation with Cholesky-correlated shocks
 
-## Part I — Univariate Risk: NVDA
+# Part I — Univariate Risk: NVDA
 
-### Data Download
+## Data Download
 
 Historical daily price data for NVIDIA (NVDA) was retrieved using `yfinance`, covering the period from January 2010 to December 2025. The dataset includes adjusted closing prices, daily highs and lows, opening prices, and trading volume.
 
@@ -75,7 +76,7 @@ The data was used to calculate daily log-returns and analyze the evolution of NV
 
 ![NVDA Historical Price](images/price_nvda.png)
 
-### Returns and Log-Returns
+## Returns and Log-Returns
 
 Daily simple returns and log-returns were calculated from adjusted closing prices to analyze NVIDIA's daily performance. These measures help characterize the distribution of returns, identify extreme market movements, and assess the statistical properties of the series.
 
@@ -91,7 +92,7 @@ Daily log returns have a mean of approximately **0.15%** and a standard deviatio
 
 ![NVDA Returns and Log-Returns](images/returns_nvda.png)
 
-### Kernel Density Estimation (KDE)
+## Kernel Density Estimation (KDE)
 
 Kernel Density Estimation (KDE) was used to visualize the empirical distribution of NVIDIA's daily log-returns. This non-parametric approach helps assess the distribution's shape, including its concentration around zero, asymmetry, and potential heavy tails. The empirical distribution of NVIDIA's daily log-returns was compared with a normal distribution and Gaussian Mixture Models (GMMs) with two and three components. This comparison evaluates whether mixtures of Gaussian distributions can better capture the characteristics of financial returns, including asymmetry, heavy tails, and potential heterogeneity in market conditions.
 
@@ -99,7 +100,7 @@ Kernel Density Estimation (KDE) was used to visualize the empirical distribution
 
 The log-returns of NVDA are highly concentrated around zero and exhibit a pronounced peak with relatively heavy tails. The single Gaussian distribution does not fully capture the empirical shape of the returns. Mixture models provide a more flexible representation, with the three-Gaussian mixture appearing to fit the kernel density particularly well. This suggests that NVDA returns may exhibit non-normal and potentially heterogeneous behavior that is better captured by a mixture distribution.
 
-### Autocorrelation Analysis
+## Autocorrelation Analysis
 
 The Autocorrelation Function (ACF) was examined for both daily log-returns and squared log-returns. The former helps identify serial dependence in returns, while the latter helps detect volatility clustering and persistence, common characteristics of financial time series.
 
@@ -107,7 +108,7 @@ The Autocorrelation Function (ACF) was examined for both daily log-returns and s
 
 The ACF of the log-returns shows little evidence of significant autocorrelation, suggesting that returns are approximately uncorrelated over time. In contrast, the squared log-returns exhibit significant positive autocorrelation, indicating volatility clustering: periods of high (or low) volatility tend to be followed by periods of similarly high (or low) volatility. This is a common feature of financial returns and provides motivation for using GARCH-type models.
 
-### GJR-GARCH Model Fitting
+## GJR-GARCH Model Fitting
 
 A GJR-GARCH(1,1) model was fitted to NVIDIA's daily log-returns to capture volatility clustering and asymmetric responses to market shocks. The model allows negative shocks to have a different impact on conditional volatility than positive shocks of the same magnitude.
 For the asset, returns are modeled as:
@@ -145,7 +146,7 @@ where:
 
 A negative shock therefore has an impact of $(\alpha+\gamma)$, while a positive shock has an impact of $\alpha$. A statistically significant $\gamma$ indicates that negative returns generate a stronger volatility response than positive returns of the same magnitude.
 
-### NVDA Results
+## NVDA Results
 
 The GJR-GARCH(1,1) model was estimated using 4,024 daily observations under a Normal innovation distribution.
 
@@ -163,7 +164,7 @@ The model achieves:
 |---:|---:|---:|
 | -9,644.24 | 19,298.5 | 19,330.0 |
 
-### Interpretation
+## Interpretation
 
 The estimated $\gamma=0.0852$ is statistically significant at the 5% level, providing evidence of an **asymmetric volatility response**. Negative shocks therefore have a larger effect on future volatility than positive shocks of the same magnitude.
 
@@ -182,13 +183,13 @@ $$
 
 This indicates that volatility shocks in NVDA decay slowly over time, consistent with strong volatility clustering.
 
-### Conditional Volatility Analysis
+## Conditional Volatility Analysis
 
 The fitted GJR-GARCH model was used to estimate NVIDIA's time-varying conditional volatility. The resulting series captures periods of increased and decreased market uncertainty, highlighting volatility clustering and the persistence of volatility over time.
 
 ![NVDA GJR-GARCH Conditional Volatility](images/vol_garch.png)
 
-### Innovation Distribution Comparison
+## Innovation Distribution Comparison
 
 To account for the heavy tails observed in the standardized residuals, the GJR-GARCH model was estimated under four different innovation distributions.
 
@@ -205,7 +206,7 @@ The heavy-tailed specifications provide a substantially better fit than the Norm
 
 The results support the presence of **heavy-tailed return innovations**, making the Student-t specification more appropriate for subsequent volatility and risk analysis.
 
-### Value at Risk (VaR)
+## Value at Risk (VaR)
 
 VaR is estimated at 5%, 1%, and 0.1% confidence levels under four alternative innovation distributions: Normal, Student-t, GED, and Skewed Student-t. This comparison evaluates how distributional assumptions affect estimated potential losses, particularly under extreme market conditions.
 
@@ -227,11 +228,11 @@ VaR is estimated at 5%, 1%, and 0.1% confidence levels under four alternative in
 The results highlight the importance of the assumed return distribution, particularly at extreme confidence levels. At 5%, the estimated losses are relatively similar across distributions, but the differences become substantial at the **0.1% tail**. The Student-t and Skewed Student-t specifications produce VaR losses above 10%, reflecting their ability to capture the heavy tails observed in NVDA returns. This supports the use of **heavy-tailed distributions for extreme-risk estimation** rather than relying solely on the Normal assumption.
 
 
-## Part II — Multivariate Portfolio Risk Analysis
+# Part II — Multivariate Portfolio Risk Analysis
 
 This section analyses a four-asset portfolio consisting of NVIDIA (NVDA), Microsoft (MSFT), Johnson & Johnson (JNJ), and Procter & Gamble (PG). The objective is to model time-varying volatility and correlations, estimate portfolio risk, and evaluate the reliability of out-of-sample VaR forecasts.
 
-### Data Download
+## Data Download
 
 These assets were selected to construct a multi-asset portfolio combining technology and defensive stocks. The resulting dataset was used to calculate daily returns, analyze cross-asset dependencies, and estimate portfolio risk using multivariate volatility models.
 
@@ -247,9 +248,7 @@ The dataset contains **4,024 daily observations**, covering January 2010 to Dece
 
 ![NVDA GJR-GARCH Conditional Volatility](images/mult_vol.png)
 
-### 1. Exploratory Data Analysis
-
-
+## Exploratory Data Analysis
 
 
 
@@ -281,7 +280,7 @@ The unconditional return correlation matrix shows that NVDA and MSFT have the st
 
 These relationships suggest potential diversification benefits from combining technology stocks with defensive assets. However, correlations can change over time, motivating the use of a Dynamic Conditional Correlation (DCC-GARCH) model.
 
-## 3. DCC-GARCH (Engle, 2002)
+## DCC-GARCH (Engle, 2002)
 
 With $z_t = \varepsilon_t / \sigma_t$ (standardized residuals from Step 1):
 
@@ -335,7 +334,7 @@ The estimated degrees of freedom are around 4.5 for all four assets, supporting 
 
 The high p-values indicate no significant evidence of remaining autocorrelation in squared standardized residuals or residual ARCH effects at the 10% significance level. This suggests that the individual GJR-GARCH models capture much of the conditional volatility structure in the data.
 
-### 3. Dynamic Conditional Correlation (DCC-GARCH)
+### Dynamic Conditional Correlation (DCC-GARCH)
 
 The standardized residuals from the individual volatility models are used to estimate a DCC(1,1) model:
 
@@ -370,7 +369,7 @@ The largest off-diagonal element is between NVDA and MSFT, while NVDA has weaker
 ![NVDA GJR-GARCH Conditional Volatility](images/dcc_corr.png)
 
 
-### 4. Portfolio Volatility and Risk Contributions
+## Portfolio Volatility and Risk Contributions
 
 Assuming equal portfolio weights of 25% per asset, the conditional covariance matrix is obtained from:
 
@@ -438,21 +437,6 @@ The table compares the out-of-sample VaR performance of three approaches: the No
 
 ### Out-of-Sample VaR Backtesting: Statistical Tests
 
-Value-at-Risk (VaR) estimates the loss threshold expected to be exceeded with probability \(1-c\), where \(c\) is the confidence level.
-
-$$
-\Pr(R_{p,t} < -\text{VaR}_{c,t}) = 1-c
-$$
-
-Under the conditional Gaussian assumption:
-
-$$
-\text{VaR}_{c,t}
-= -\mu_{p,t}-\sigma_{p,t}\Phi^{-1}(1-c)
-$$
-
-where \(\mu_{p,t}\) and \(\sigma_{p,t}\) are the conditional portfolio return mean and volatility, respectively.
-
 #### Kupiec Unconditional Coverage Test
 
 Let \(T\) denote the number of out-of-sample observations, \(N\) the number of exceptions, \(p=1-c\) the expected exception probability, and \(\hat{p}=N/T\) the observed exception rate.
@@ -510,7 +494,7 @@ These results should be interpreted cautiously, particularly at the 99.9% level,
 
 ## Monte Carlo Simulation
 
-## Monte Carlo Simulation of Portfolio Returns
+### Monte Carlo Simulation of Portfolio Returns
 
 Monte Carlo simulation is used to estimate the distribution of next-day portfolio returns by generating 50,000 (or `N_SIM`) correlated scenarios from the fitted GJR-GARCH and DCC models. The simulation incorporates time-varying individual asset volatility, asymmetric volatility responses to negative shocks, and dynamic correlations between assets. Standardized shocks are drawn from either a multivariate Normal or Student-t distribution, allowing the analysis to capture different levels of tail risk.
 
