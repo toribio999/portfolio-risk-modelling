@@ -492,10 +492,30 @@ where $Q_{\alpha}$ is the empirical $\alpha$-quantile of terminal PnL. Both meas
 
 ![Simulated portfolio value paths](images/mont_paths.png)
 
-<!-- TODO: add the numerical results (horizon, VaR and ES, Normal vs Student-t) from the notebook. -->
+#### Results
 
-**Limitations.** Results depend on the fitted parameters, the shock distribution, the rebalancing convention and the horizon. Monte Carlo estimates carry simulation error, especially for extreme quantiles such as 99.9% VaR; more paths improve numerical precision but do not remove model risk. As in the one-day case, the simulation uses full-sample estimates and the final observed state, so it is a conditional scenario analysis and not an out-of-sample validation.
+Simulation of 100-day horizon with an initial portfolio value of 1,000,000, using dynamically updated GJR-GARCH volatilities and DCC correlations.
 
+| Confidence Level | Horizon VaR | VaR (% of initial value) | Expected Shortfall |
+|---:|---:|---:|---:|
+| 95% | 79,697 | 7.97% | 131,863 |
+| 99% | 163,963 | 16.40% | 214,018 |
 
+Over a 100-day horizon, the portfolio loses more than 79,697 (7.97%) in 5% of simulated scenarios, and more than 163,963 (16.40%) in 1% of them. Expected Shortfall is clearly above VaR at both levels, which shows that losses beyond the VaR threshold are substantially larger than the threshold itself. This effect is stronger at 95%, where ES is about 65% higher than VaR, than at 99%, where it is about 31% higher.
 
+## Limitations and Next Steps
 
+### Limitations
+
+- **Monte Carlo is not out-of-sample:** one-day and multi-day simulations use full-sample parameters and the final observed volatility and correlation states, so they are conditional scenario analyses, not validated forecasts.
+- **Low power at 99.9%:** only about 2.5 exceptions are expected in 2,514 observations, so backtests at this level have limited statistical power.
+- **Fixed portfolio:** equal weights, four assets and daily rebalancing, with no transaction costs.
+- **Model risk:** results depend on the GJR-GARCH(1,1) specification, a single DCC(1,1) with common dynamics for all pairs, and the chosen shock distribution.
+
+### Next Steps
+
+1. **Backtest Expected Shortfall** (e.g. with the Acerbi-Szekely or McNeil-Frey tests) in addition to VaR, to evaluate the size of losses beyond the threshold.
+2. **Verify Student-t vs FHS at 99%**, where both methods give identical exception counts, to confirm each one uses its own VaR series.
+3. **Make Monte Carlo out-of-sample:** re-estimate the models on a rolling window and validate multi-day VaR and ES against realised portfolio losses.
+4. **Move beyond equal weights:** compare minimum-variance or risk-parity allocations, which directly address the risk concentration found in NVDA.
+5. **Run stress scenarios:** simulate historical crises (e.g. March 2020) and shocks to correlations to see how the portfolio behaves outside the fitted regime.
