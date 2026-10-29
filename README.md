@@ -12,8 +12,8 @@ Two Jupyter notebooks build the workflow, moving from a **single stock (NVDA)** 
 
 | Notebook | Scope | Core question |
 |---|---|---|
-| `Modelling_1.ipynb` | Univariate | How volatile is NVDA, how does that volatility behave over time, and how large can a one-day loss be? |
-| `Modelling2_multivariate.ipynb` | Multivariate | How do correlations and volatilities interact at portfolio level, and how reliable is the resulting VaR? |
+| `Modelling_Univariate.ipynb` | Univariate | How volatile is NVDA, how does that volatility behave over time, and how large can a one-day loss be? |
+| `Modelling_Multivariate.ipynb` | Multivariate | How do correlations and volatilities interact at portfolio level, and how reliable is the resulting VaR? |
 
 ## Key Insights
 
